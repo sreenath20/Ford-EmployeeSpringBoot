@@ -39,7 +39,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee") // update employee
-    public EmployeeDto replaceResource(@RequestBody EmployeeDto employee) throws EmployeeException {
+    public EmployeeDto replaceResource(@Valid @RequestBody EmployeeDto employee) throws EmployeeException {
       //  return "Put request !"+employee;
     return employeeService.updateEmployee(employee);
     }
