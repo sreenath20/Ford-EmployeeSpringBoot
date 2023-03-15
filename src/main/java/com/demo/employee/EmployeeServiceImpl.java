@@ -1,40 +1,53 @@
 package com.demo.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-//@Component
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeJpaRepository employeeJpaRepository;
 
     @Override
     public EmployeeDto registerEmployee(EmployeeDto newEmployee) {
-        return employeeRepository.addEmployee(newEmployee);
+
+
+        return this.employeeJpaRepository.save(newEmployee);
     }
 
     @Override
-    public EmployeeDto getEmployeeById(Integer employeeId)throws EmployeeException {
-        EmployeeDto foundEmployee = employeeRepository.getEmployee(employeeId);
-        if(foundEmployee == null)
-            throw new EmployeeException("Employee Id does not exists.");
+    public EmployeeDto getEmployeeById(Integer employeeId) throws EmployeeException {
+        Optional<EmployeeDto> employeeOptional = this.employeeJpaRepository.findById(employeeId);
+        if(employeeOptional.isEmpty())
+            throw new EmployeeException("Employee could not be found id:"+employeeId);
 
+        return employeeOptional.get();
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(EmployeeDto employee) throws EmployeeException{
+        Optional<EmployeeDto> employeeOptional = this.employeeJpaRepository.findById(employee.getId());
+        if(employeeOptional.isEmpty())
+            throw new EmployeeException("Employee could not be updated, not found id:"+employee.getId());
+        return this.employeeJpaRepository.save(employee);
+    }
+
+    @Override
+    public EmployeeDto deleteEmployeeById(Integer employeeId) throws EmployeeException {
+        Optional<EmployeeDto> employeeOptional = this.employeeJpaRepository.findById(employeeId);
+        if(employeeOptional.isEmpty())
+            throw new EmployeeException("Employee could not be Deleted, not found id:"+employeeId);
+        EmployeeDto foundEmployee = employeeOptional.get();
+        this.employeeJpaRepository.delete(foundEmployee);
         return foundEmployee;
     }
 
     @Override
-    public EmployeeDto updateEmployee(EmployeeDto employee) {
-        return employeeRepository.updateEmployee(employee);
-    }
-
-    @Override
-    public EmployeeDto deleteEmployeeById(Integer employeeId)throws EmployeeException {
-      EmployeeDto foundEmployee = employeeRepository.getEmployee(employeeId);
-      if(foundEmployee==null)
-          throw new EmployeeException("Employee coud't be deleted, Id not found:"+employeeId);
-        return employeeRepository.deleteEmployee(employeeId);
+    public List<EmployeeDto> getAllEmployees() {
+        return this.employeeJpaRepository.findAll();
     }
 }

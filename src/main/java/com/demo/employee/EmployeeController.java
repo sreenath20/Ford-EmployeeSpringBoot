@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 //localhost:8090/swagger-ui.html
 
 @RestController
 @RequestMapping(value = "/v1") //
+@CrossOrigin(value = "http://localhost:4200/")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService ;
@@ -37,8 +39,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee") // update employee
-    public EmployeeDto replaceResource(@RequestBody EmployeeDto employee)
-    {
+    public EmployeeDto replaceResource(@RequestBody EmployeeDto employee) throws EmployeeException {
       //  return "Put request !"+employee;
     return employeeService.updateEmployee(employee);
     }
@@ -55,6 +56,37 @@ public class EmployeeController {
         return "Patch !"+employeeId+":"+employeeName;
     }
 
+    @GetMapping("employees")
+    public List<EmployeeDto> getAllEmployees(){
+        return this.employeeService.getAllEmployees();
+    }
 
+    @Autowired
+    private EmployeeJpaRepository employeeJpaRepository;
+    @GetMapping("employees/name/{name}")
+    public List<EmployeeDto> getAllEmployeesHavingName(@PathVariable("name") String name){
+        return this.employeeJpaRepository.findByName(name);
+    }
+    @GetMapping("employees/contain/{name}")
+    public List<EmployeeDto> getAllEmployeesContainingName(@PathVariable("name") String name){
+        return this.employeeJpaRepository.findByNameContaining(name);
+    }
+
+    @GetMapping("employees/salary/{minSalary}/{maxSalary}")
+    public List<EmployeeDto> findAllEmployeesHavingSalaryBetween(@PathVariable("minSalary") Double minSalary,
+                                                                 @PathVariable("maxSalary")Double maxSalary){
+        return this.employeeJpaRepository.findBySalaryBetweenOrderBySalaryDesc(minSalary,maxSalary);
+
+    }
+
+    @GetMapping("custom/employees")
+    public List<EmployeeDto> findAllEmployees(){
+        return this.employeeJpaRepository.getAllEmployees();
+    }
+
+    @GetMapping("custom/employees/{name}")
+    public List<EmployeeDto> findAllEmployeesHavingName(@PathVariable("name") String name){
+        return this.employeeJpaRepository.getAllEmployeesHavingNameLike("%"+name+"%");
+    }
 
 }

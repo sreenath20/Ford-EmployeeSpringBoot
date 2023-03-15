@@ -1,6 +1,5 @@
 package com.demo.employee;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -8,7 +7,7 @@ import java.util.Map;
 
 //@Component
 @Repository
-public class EmployeeRepositoryImpl implements EmployeeRepository{
+public class CollectionEmployeeRepositoryImpl implements CollectionEmployeeRepository {
 
     Map<Integer,EmployeeDto> employeeDtoMap = new HashMap<>();
 

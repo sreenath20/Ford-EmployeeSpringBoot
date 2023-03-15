@@ -2,7 +2,7 @@ package com.demo;
 
 import com.demo.employee.EmployeeDto;
 import com.demo.employee.EmployeeException;
-import com.demo.employee.EmployeeRepository;
+import com.demo.employee.CollectionEmployeeRepository;
 import com.demo.employee.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class EmployeeServiceTestsByMockRepository {
     @Autowired
     private EmployeeService employeeService;
     @MockBean
-    private EmployeeRepository employeeRepository;
+    private CollectionEmployeeRepository employeeRepository;
     @Test
     public void testServiceWithOutActualRepository() throws EmployeeException{
         given(this.employeeRepository.getEmployee(100))

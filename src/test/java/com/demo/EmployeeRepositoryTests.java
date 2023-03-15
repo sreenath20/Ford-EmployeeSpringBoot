@@ -1,7 +1,7 @@
 package com.demo;
 
 import com.demo.employee.EmployeeDto;
-import com.demo.employee.EmployeeRepository;
+import com.demo.employee.CollectionEmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class EmployeeRepositoryTests {
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private CollectionEmployeeRepository employeeRepository;
 
 //    EmployeeDto addEmployee(EmployeeDto employee);
 //    EmployeeDto getEmployee(Integer id);

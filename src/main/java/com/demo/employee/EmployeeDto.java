@@ -1,17 +1,26 @@
 package com.demo.employee;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@Entity
+
 public class EmployeeDto {
 
-    @NotNull(message = "Id cant be null")
-
+   // @NotNull(message = "Id cant be null")
+    @Id
+    @GeneratedValue
     private Integer id;
 
     //@NotNull(message = "Name cant be null")
     @NotBlank(message = "Name cant be null, it should contain chars")
-    @Pattern(regexp = "[a-zA-Z]{3,16}", message = "Name should contain min 3 & max 16 chars , no digits and special chars allowed.")
+    @Pattern(regexp = "[a-zA-Z ]{3,16}", message = "Name should contain min 3 & max 16 chars , no digits and special chars allowed.")
     private String name;
 
     @Email(message = "Please provide valid email. e.g name@ford.com")
@@ -21,14 +30,16 @@ public class EmployeeDto {
     @Pattern(regexp = "[0-9]{10}",message = "Tel no should contain only 10 digits")
     private String phoneNumber;
     //@Future
+
     @FutureOrPresent(message = "Join data cant be in pas")
     //@Past
     //@PastOrPresent
 
     private LocalDate dateOfJoining;
-
+    @Value("${application.salary}")
     private Double salary;
 
+    //private String password;
     public String getEmail() {
         return email;
     }
